@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Alert Hub | منصة تنبيهات المدرسة</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-deep: #080d09;
+            --bg-surface: #0f1811;
+            --panel-bg: rgba(18, 30, 21, 0.75);
+            --panel-border: rgba(202, 158, 20, 0.25);
+            
+            --green-dark: #0a2012;
+            --green-mid: #143d21;
+            --green-accent: #235c33;
+
+            --yellow-dark: #8a6805;
+            --yellow-gold: #c69512;
+            --yellow-light: #f5cf56;
+            --yellow-glow: rgba(198, 149, 18, 0.35);
+
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --text-muted: #64748b;
+
+            --danger: #ef4444;
+            --danger-bg: rgba(239, 68, 68, 0.15);
+            --danger-border: rgba(239, 68, 68, 0.4);
+
+            --radius-md: 14px;
+            --radius-lg: 24px;
+            --radius-full: 9999px;
+
+            --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(20, 61, 33, 0.4) 0%, transparent 45%),
+                radial-gradient(circle at 85% 85%, rgba(198, 149, 18, 0.15) 0%, transparent 45%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 30px 15px;
+        }
+
+        .app-wrapper {
+            width: 100%;
+            max-width: 650px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .glass-panel {
+            background: var(--panel-bg);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid var(--panel-border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* HEADER */
+        .header-section {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .logo-box {
+            width: 90px;
+            height: 90px;
+            border-radius: var(--radius-lg);
+            background: var(--bg-surface);
+            border: 2px solid var(--yellow-gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin-bottom: 12px;
+            box-shadow: 0 0 15px var(--yellow-glow);
+        }
+
+        .logo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .brand-title {
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: #fff;
+        }
+
+        .user-nav-bar {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            font-size: 0.85rem;
+        }
+
+        .role-badge {
+            color: var(--yellow-light);
+            font-weight: 700;
+        }
+
+        .btn-switch-role {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid var(--danger-border);
+            color: #fca5a5;
+            padding: 6px 14px;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: var(--transition-normal);
+        }
+
+        .btn-switch-role:hover {
+            background: var(--danger);
+            color: #fff;
+        }
+
+        /* ROLE SELECTION SCREEN */
+        .role-selection-box {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .role-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--yellow-gold);
+        }
+
+        .role-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .role-card {
+            background: rgba(10, 32, 18, 0.6);
+            border: 2px solid var(--green-accent);
+            border-radius: var(--radius-md);
+            padding: 24px 16px;
+            cursor: pointer;
+            transition: var(--transition-normal);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .role-card:hover {
+            border-color: var(--yellow-gold);
+            transform: translateY(-4px);
+            background: rgba(20, 48, 27, 0.8);
+            box-shadow: 0 10px 20px var(--yellow-glow);
+        }
+
+        .role-icon {
+            font-size: 2.2rem;
+        }
+
+        .role-card-title {
+            font-weight: 800;
+            font-size: 1.05rem;
+        }
+
+        /* LOGIN FORM FOR TEACHER */
+        .login-box {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        /* INPUTS & BUTTONS */
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .input-field, .select-field, .textarea-field {
+            width: 100%;
+            background: rgba(8, 13, 9, 0.7);
+            border: 1px solid rgba(35, 92, 51, 0.5);
+            border-radius: var(--radius-md);
+            padding: 12px;
+            color: var(--text-main);
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .input-field:focus, .textarea-field:focus {
+            border-color: var(--yellow-gold);
+            box-shadow: 0 0 10px var(--yellow-glow);
+        }
+
+        .textarea-field { resize: vertical; min-height: 80px; }
+
+        .btn-primary {
+            width: 100%;
+            background: linear-gradient(135deg, var(--yellow-gold), var(--yellow-dark));
+            color: #050d07;
+            font-weight: 800;
+            padding: 12px;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition-normal);
+            font-size: 1rem;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--yellow-light), var(--yellow-gold));
+            transform: translateY(-2px);
+        }
+
+        /* FEED SECTION */
+        .feed-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feed-title::before {
+            content: '';
+            width: 4px;
+            height: 18px;
+            background: var(--yellow-gold);
+        }
+
+        .alert-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .alert-card {
+            background: rgba(15, 24, 17, 0.6);
+            border-right: 5px solid var(--yellow-gold);
+            border-radius: var(--radius-md);
+            padding: 14px;
+        }
+
+        .alert-card.urgent {
+            border-right-color: var(--danger);
+            background: var(--danger-bg);
+        }
+
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+
+        .author-name { font-weight: 700; color: var(--yellow-gold); }
+        .alert-card.urgent .author-name { color: #fca5a5; }
+        .card-time { font-size: 0.75rem; color: var(--text-sub); }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <div class="app-wrapper">
+        
+        <!-- HEADER -->
+        <header class="glass-panel header-section">     
+<div class="">
+            </div>
+            
+            <h1 class="brand-title">منصة تنبيهات المدرسة </h1>
+        
+                saint mary shcool
+            </h1>
+            
+            <!-- الشريط ده بيظهر لما يحدد صفته -->
+            <div class="user-nav-bar hidden" id="userNavBar">
+                <span>الصفة الحالية: <span class="role-badge" id="roleDisplay">طالب</span></span>
+                <button class="btn-switch-role" onclick="logoutRole()">🔄 تغيير الحساب / خروج</button>
+            </div>
+        </header>
+
+        <!-- 1. شاشة اختيار الصفة (طالب أم مدرس) -->
+        <section class="glass-panel" id="roleSelectionScreen">
+            <div class="role-selection-box">
+                <div class="role-title">مرحباً بك! يرجى تحديد صفك للدخول:</div>
+                <div class="role-buttons">
+                    <div class="role-card" onclick="selectRole('student')">
+                        <div class="role-icon">🎓</div>
+                        <div class="role-card-title">طالب / ولي أمر</div>
+                        <span style="font-size:0.75rem; color:var(--text-sub);">تصفح التنبيهات فقط</span>
+                    </div>
+
+                    <div class="role-card" onclick="selectRole('teacher')">
+                        <div class="role-icon">👨‍🏫</div>
+                        <div class="role-card-title">مدرس / إدارة</div>
+                        <span style="font-size:0.75rem; color:var(--text-sub);">إرسال بلاغات وتنبيهات</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. شاشة تسجيل دخول المدرس (الباسورد) -->
+        <section class="glass-panel hidden" id="teacherLoginScreen">
+            <div class="login-box">
+                <div class="role-title">تسجيل دخول كـ مدرس 🔐</div>
+                <div class="input-group">
+                    <label style="font-size: 0.85rem; color: var(--text-sub);">كلمة المرور الخاصة بالمدرسين:</label>
+                    <input type="password" id="passwordInput" class="input-field" placeholder="ادخل كلمة المرور">
+                </div>
+                <button class="btn-primary" onclick="verifyPassword()">دخول لوحة التحكم</button>
+                <button class="btn-switch-role" onclick="logoutRole()" style="align-self: center; margin-top: 5px;">رجوع</button>
+            </div>
+        </section>
+
+        <!-- 3. لوحة كتابة التنبيهات (بتظهر للمدرس فقط بعد الباسورد الصح) -->
+        <main class="glass-panel hidden" id="teacherPostForm">
+            <div class="login-box">
+                <div class="role-title">📢 إرسال تنبيه جديد</div>
+                <div class="input-group">
+                    <input type="text" id="teacherInput" class="input-field" placeholder="اسمك (أستاذ / ميس...)">
+                </div>
+                <div class="input-group">
+                    <select id="typeInput" class="select-field">
+                        <option value="normal">تنبيه عادي ℹ️</option>
+                        <option value="urgent">تنبيه عاجل / مشكلة ⚠️</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <textarea id="messageInput" class="textarea-field" placeholder="اكتب تفاصيل التنبيه أو المشكلة..."></textarea>
+                </div>
+                <button class="btn-primary" onclick="publishAlert()">نشر التنبيه فوريًا 🚀</button>
+            </div>
+        </main>
+
+        <!-- 4. قائمة التنبيهات الحية (بتظهر للجميع) -->
+        <section class="glass-panel hidden" id="alertsFeedScreen">
+            <div class="feed-title">سجل التنبيهات الحية</div>
+            <div class="alert-list" id="alertsList">
+                <!-- التنبيهات بتنزل هنا -->
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'school_alerts_db_v2';
+        const TEACHER_PASS = '1234'; // 🔥 تقدر تغير الباسورد ده لأي حاجة تحبها
+
+        // اختيار الصفة
+        function selectRole(role) {
+            if (role === 'student') {
+                localStorage.setItem('user_role', 'student');
+                showStudentUI();
+            } else if (role === 'teacher') {
+                document.getElementById('roleSelectionScreen').classList.add('hidden');
+                document.getElementById('teacherLoginScreen').classList.remove('hidden');
+            }
+        }
+
+        // التحقق من باسورد المدرس
+        function verifyPassword() {
+            const inputPass = document.getElementById('passwordInput').value;
+            if (inputPass === TEACHER_PASS) {
+                localStorage.setItem('user_role', 'teacher');
+                document.getElementById('passwordInput').value = '';
+                showTeacherUI();
+            } else {
+                alert('⚠️ كلمة المرور غير صحيحة!');
+            }
+        }
+
+        // الخروج / تغيير الحساب
+        function logoutRole() {
+            localStorage.removeItem('user_role');
+            document.getElementById('roleSelectionScreen').classList.remove('hidden');
+            document.getElementById('teacherLoginScreen').classList.add('hidden');
+            document.getElementById('teacherPostForm').classList.add('hidden');
+            document.getElementById('alertsFeedScreen').classList.add('hidden');
+            document.getElementById('userNavBar').classList.add('hidden');
+        }
+
+        // واجهة الطالب
+        function showStudentUI() {
+            document.getElementById('roleSelectionScreen').classList.add('hidden');
+            document.getElementById('teacherLoginScreen').classList.add('hidden');
+            document.getElementById('teacherPostForm').classList.add('hidden');
+            
+            document.getElementById('alertsFeedScreen').classList.remove('hidden');
+            document.getElementById('userNavBar').classList.remove('hidden');
+            document.getElementById('roleDisplay').textContent = 'طالب / ولي أمر 🎓';
+            renderAlerts();
+        }
+
+        // واجهة المدرس
+        function showTeacherUI() {
+            document.getElementById('roleSelectionScreen').classList.add('hidden');
+            document.getElementById('teacherLoginScreen').classList.add('hidden');
+            
+            document.getElementById('teacherPostForm').classList.remove('hidden');
+            document.getElementById('alertsFeedScreen').classList.remove('hidden');
+            document.getElementById('userNavBar').classList.remove('hidden');
+            document.getElementById('roleDisplay').textContent = 'مدرس / إدارة 👨‍🏫';
+            renderAlerts();
+        }
+
+        // إدارة التنبيهات (LocalStorage)
+        function getAlerts() {
+            const data = localStorage.getItem(STORAGE_KEY);
+            return data ? JSON.parse(data) : [
+                { teacher: "إدارة المدرسة", type: "urgent", message: "تنبيه هام: غداً إجازة رسمية بمناسبة الإحياء السنوي.", time: "09:00 ص" }
+            ];
+        }
+
+        function saveAlerts(alerts) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(alerts));
+        }
+
+        function renderAlerts() {
+            const alerts = getAlerts();
+            const container = document.getElementById('alertsList');
+            container.innerHTML = '';
+
+            if (alerts.length === 0) {
+                container.innerHTML = '<p style="text-align:center; color:var(--text-sub); padding:15px;">لا توجد تنبيهات حالياً.</p>';
+                return;
+            }
+
+            alerts.forEach(alert => {
+                const isUrgent = alert.type === 'urgent';
+                const card = document.createElement('div');
+                card.className = `alert-card ${isUrgent ? 'urgent' : ''}`;
+                card.innerHTML = `
+                    <div class="card-top">
+                        <span class="author-name">${alert.teacher} ${isUrgent ? '⚠️ (عاجل)' : ''}</span>
+                        <span class="card-time">${alert.time}</span>
+                    </div>
+                    <div>${alert.message}</div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function publishAlert() {
+            const teacher = document.getElementById('teacherInput').value.trim();
+            const type = document.getElementById('typeInput').value;
+            const message = document.getElementById('messageInput').value.trim();
+
+            if (!teacher || !message) {
+                alert('يرجى ملء كافة البيانات!');
+                return;
+            }
+
+            const alerts = getAlerts();
+            alerts.unshift({
+                teacher: teacher,
+                type: type,
+                message: message,
+                time: new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' })
+            });
+
+            saveAlerts(alerts);
+            renderAlerts();
+            document.getElementById('messageInput').value = '';
+        }
+
+        // حفظ الحالة عند عمل Refresh للصفحة
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedRole = localStorage.getItem('user_role');
+            if (savedRole === 'student') showStudentUI();
+            else if (savedRole === 'teacher') showTeacherUI();
+        });
+    </script>
+</body>
+</html>
